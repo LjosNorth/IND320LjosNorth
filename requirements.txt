@@ -15,11 +15,12 @@ cycler==0.12.1
 daemonize==2.5.0
 dbus-python==1.4.0
 debugpy==1.8.22
+docopt==0.6.2
 executing==2.2.1
 fastjsonschema==2.22.2
 filelock==3.31.2
 fonttools==4.65.0
-#gps==3.27.5
+gps==3.27.5
 h11==0.16.0
 httptools==0.8.0
 idna==3.19
@@ -83,7 +84,7 @@ six==1.17.0
 stack-data==0.6.3
 starlette==1.6.0
 streamlit==1.64.0
-# ??? TBB @ file:///build/onetbb/src/build/python/python_build
+TBB @ file:///build/onetbb/src/build/python/python_build
 toml==0.10.2
 tornado==6.5.10
 tqdm==4.70.1
@@ -97,3 +98,4 @@ watchdog==6.0.0
 wcwidth==0.8.3
 websockets==16.1.1
 wheel==0.48.0
+yarg==0.1.10
