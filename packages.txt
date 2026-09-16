@@ -1,5 +1,6 @@
 pkg-config
 libdbus-1-dev
+libglib2.0-dev
 cmake
 meson
 ninja-build
