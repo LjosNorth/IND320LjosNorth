@@ -19,7 +19,7 @@ executing==2.2.1
 fastjsonschema==2.22.2
 filelock==3.31.2
 fonttools==4.65.0
-gps==3.27.5
+#gps==3.27.5
 h11==0.16.0
 httptools==0.8.0
 idna==3.19
