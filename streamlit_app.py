@@ -8,23 +8,19 @@ st.set_page_config(
 
 home = st.Page(
     "pages/page1.py",
-    title="home",
-    icon=""
+    title="home"
 )
 page2 = st.Page(
     "pages/page2.py",
-    title="page2",
-    icon="󰬻"
+    title="page2"
 )
 page3 = st.Page(
     "pages/page3.py",
-    title="page3",
-    icon="󰬼"
+    title="page3"
 )
 settings = st.Page(
     "pages/page4.py",
-    title="settings",
-    icon=""
+    title="settings"
 )
 
 
