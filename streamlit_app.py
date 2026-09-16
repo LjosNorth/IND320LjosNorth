@@ -33,5 +33,4 @@ selected_page = st.navigation(
     position="sidebar"
 )
 
-# st.title("lorem ipsum")
-# st.write("dolor sit amet, consectetur adipiscing elit. Integer enim neque, tincidunt eu sagittis a, suscipit ac eros. Vivamus vitae porttitor lorem, id fringilla dolor. Phasellus semper eu lacus a sodales")
+selected_page.run()
