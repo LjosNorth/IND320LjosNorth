@@ -1,2 +1,6 @@
 pkg-config
 libdbus-1-dev
+cmake
+meson
+ninja-build
+
