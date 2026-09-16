@@ -23,6 +23,15 @@ settings = st.Page(
     title="settings"
 )
 
+selected_page = st.navigation(
+    [
+        home,
+        page2,
+        page3,
+        settings
+    ],
+    position="sidebar"
+)
 
 # st.title("lorem ipsum")
 # st.write("dolor sit amet, consectetur adipiscing elit. Integer enim neque, tincidunt eu sagittis a, suscipit ac eros. Vivamus vitae porttitor lorem, id fringilla dolor. Phasellus semper eu lacus a sodales")
