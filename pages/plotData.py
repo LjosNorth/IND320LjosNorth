@@ -3,6 +3,8 @@ from os import name
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
+from plotly.graph_objs.layout import xaxis
+
 from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
 
@@ -15,11 +17,12 @@ st.write("Duis eget sollicitudin justo. Pellentesque aliquam congue turpis sed a
 fullReservoirs = load_Reservoirs()
 
 # Select Box for Columns
-fullColumns = fullReservoirs.columns.to_list()
-fullColumns.append("All columns")
-# optionColumns = ""
+# fullColumns = fullReservoirs.columns.to_list()
+# fullColumns.append("All columns")
+fullColumns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh"] #for now reducing what can be displayed
+
 optionsColumns = st.selectbox("Select what columns to display", fullColumns)
-optionsColumns = "fyllingsgrad"
+
 
 #slider
 fullReservoirs["dato_Id"] = pd.to_datetime(fullReservoirs["dato_Id"]).sort_values()
@@ -37,5 +40,7 @@ else:
     fig = go.Figure(
         data = [go.Histogram(x=reservoirs[optionsColumns])]
     )
+    fig.update_xaxes(title_text=optionsColumns)
+    fig.update_yaxes(title_text="count")
     fig.show()
     st.plotly_chart(fig)
