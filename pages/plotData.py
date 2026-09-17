@@ -1,6 +1,8 @@
+from os import name
+
 import pandas as pd
 import streamlit as st
-import plotly
+import plotly.graph_objects as go
 from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
 
@@ -17,6 +19,7 @@ fullColumns = fullReservoirs.columns.to_list()
 fullColumns.append("All columns")
 # optionColumns = ""
 optionsColumns = st.selectbox("Select what columns to display", fullColumns)
+optionsColumns = "fyllingsgrad"
 
 #slider
 fullReservoirs["dato_Id"] = pd.to_datetime(fullReservoirs["dato_Id"]).sort_values()
@@ -31,4 +34,7 @@ elif optionsColumns == "All columns":
     reservoirs = reservoirsSelect(fullReservoirs, [], months)
 else:
     reservoirs = reservoirsSelect(fullReservoirs, [optionsColumns], months)
-    reservoirs.plot(kind="scatter", x="dato_Id", y="valor")
+    fig = go.Figure(
+        data = [go.Histogram(x=reservoirs)]
+    )
+    fig.show()
