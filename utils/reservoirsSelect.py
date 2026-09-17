@@ -1,10 +1,11 @@
 import pandas as pd
 import streamlit as st
 
-def reservoirsSelect(columns:list[str]=[], months:int=0) -> pd.DataFrame:
+def reservoirsSelect(dataFrame:pd.DataFrame, columns:list[str]=[], months:int=0) -> pd.DataFrame:
         '''importing reservoirs data, then grabbing columns based on months and desired column output
 
         Parameters:
+                 dataFrame: dataframe with reservoirs data
                  columns (list[str], optional): list of columns to grab, default to grab all columns
                  months (int, optional): number of months to grab, default to all months
 
@@ -16,17 +17,10 @@ def reservoirsSelect(columns:list[str]=[], months:int=0) -> pd.DataFrame:
         if months < 0:
             raise ValueError("months must be zero or greater")
 
-        df = load_Reservoirs()
         # df = df.dropna()
-        df["dato_Id"] = pd.to_datetime(df["dato_Id"]) # converting string to datetime <class 'pandas.Timestamp'>
-        df = grab_logic(df, columns, months)
-        return df
-
-
-@st.cache_data
-def load_Reservoirs():
-        return pd.read_csv('../data/reservoirs.csv')
-
+        dataFrame["dato_Id"] = pd.to_datetime(dataFrame["dato_Id"]) # converting string to datetime <class 'pandas.Timestamp'>
+        dataFrame = grab_logic(dataFrame, columns, months)
+        return dataFrame
 
 def grab_logic(dataFrame:pd.DataFrame, columns:list[str], months:int) -> pd.DataFrame:
         '''logic for grabbing reservoirs data'''

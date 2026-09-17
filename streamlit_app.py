@@ -6,7 +6,7 @@ st.set_page_config(
     layout="centered",
 )
 
-pageHome = st.Page("pages/page1.py",title="Home")
+pageHome = st.Page("pages/home.py", title="Home")
 pageTables = st.Page("pages/tabularData.py", title="Tables")
 page3 = st.Page("pages/page3.py", title="page3")
 pageSettings = st.Page("pages/page4.py", title="settings")
