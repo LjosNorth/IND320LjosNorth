@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-reservoirs = pd.read_csv("/data/reservoirs.csv")
+reservoirs = pd.read_csv("data/reservoirs.csv")
 reservoirsDF = pd.DataFrame(reservoirs)
 
 st.title("Mauris lorem")
