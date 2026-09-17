@@ -9,7 +9,7 @@ st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum e
 
 st.write("with column config")
 st.data_editor(
-    reservoirsDF,
+    reservoirsDF["omrnr"],
     column_config={
         "omrnr": st.column_config.LineChartColumn(
             "filler text",
