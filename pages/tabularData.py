@@ -9,7 +9,7 @@ def load_Reservoirs():
 st.title("Mauris lorem")
 st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eros purus, sagittis in finibus eu, ultricies sit amet nisi. Cras at sagittis eros.")
 
-reservoirsDF = reservoirsSelect.reservoirsSelect()
+reservoirsDF = reservoirsSelect.reservoirsSelect(load_Reservoirs())
 
 st.write("with column config")
 st.data_editor(
