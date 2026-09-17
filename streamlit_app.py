@@ -8,13 +8,13 @@ st.set_page_config(
 
 pageHome = st.Page("pages/home.py", title="Home")
 pageTables = st.Page("pages/tabularData.py", title="Tables")
-page3 = st.Page("pages/page3.py", title="page3")
+pagePlots = st.Page("pages/plotData.py", title="Plots")
 pageSettings = st.Page("pages/page4.py", title="settings")
 
 if st.session_state.get("is_admit", True):
-    pages = [pageHome, pageTables, page3, pageSettings]
+    pages = [pageHome, pageTables, pagePlots, pageSettings]
 else:
-    pages = [pageHome, pageTables, page3]
+    pages = [pageHome, pageTables, pagePlots]
 
 sidebar = st.navigation(pages, position="sidebar")
 sidebar.run()

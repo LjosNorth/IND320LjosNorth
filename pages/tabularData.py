@@ -2,12 +2,7 @@ from pathlib import Path
 import streamlit as st
 import pandas as pd
 from utils.reservoirsSelect import reservoirsSelect
-
-ROOT = Path(__file__).resolve().parent.parent
-RESERVOIRS_FILE = ROOT / "data" / "reservoirs.csv"
-@st.cache_data
-def load_Reservoirs():
-    return pd.read_csv(RESERVOIRS_FILE)
+from utils.dataLoaders import load_Reservoirs
 
 st.title("Mauris lorem")
 st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eros purus, sagittis in finibus eu, ultricies sit amet nisi. Cras at sagittis eros.")
@@ -28,7 +23,7 @@ st.dataframe(
             width="medium",
             y_min=0,
             y_max=100,
-            help="this better work"
+            help="Data for each column in the first month"
         )
     }
 )
