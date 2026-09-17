@@ -35,6 +35,7 @@ elif optionsColumns == "All columns":
 else:
     reservoirs = reservoirsSelect(fullReservoirs, [optionsColumns], months)
     fig = go.Figure(
-        data = [go.Histogram(x=reservoirs)]
+        data = [go.Histogram(x=reservoirs[optionsColumns])]
     )
     fig.show()
+    st.plotly_chart(fig)
