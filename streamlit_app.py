@@ -6,31 +6,15 @@ st.set_page_config(
     layout="centered",
 )
 
-home = st.Page(
-    "pages/page1.py",
-    title="home"
-)
-page2 = st.Page(
-    "pages/page2.py",
-    title="page2"
-)
-page3 = st.Page(
-    "pages/page3.py",
-    title="page3"
-)
-settings = st.Page(
-    "pages/page4.py",
-    title="settings"
-)
+pageHome = st.Page("pages/page1.py",title="home")
+pageTables = st.Page("pages/tabularData.py", title="Tables")
+page3 = st.Page("pages/page3.py", title="page3")
+pageSettings = st.Page("pages/page4.py", title="settings")
 
-selected_page = st.navigation(
-    [
-        home,
-        page2,
-        page3,
-        settings
-    ],
-    position="sidebar"
-)
+if st.session_state.get("is_admit", True):
+    pages = [pageHome, pageTables, page3, pageSettings]
+else:
+    pages = [pageHome, pageTables, page3]
 
-selected_page.run()
+sidebar = st.navigation(pages, position="sidebar")
+sidebar.run()
