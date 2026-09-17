@@ -4,7 +4,7 @@ from utils.reservoirsSelect import reservoirsSelect
 
 @st.cache_data
 def load_Reservoirs():
-    return pd.read_csv("../data/reservoirs.csv")
+    return pd.read_csv("data/reservoirs.csv")
 
 st.title("Mauris lorem")
 st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eros purus, sagittis in finibus eu, ultricies sit amet nisi. Cras at sagittis eros.")
