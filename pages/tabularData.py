@@ -7,7 +7,7 @@ from utils.dataLoaders import load_Reservoirs
 st.title("Mauris lorem")
 st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eros purus, sagittis in finibus eu, ultricies sit amet nisi. Cras at sagittis eros.")
 
-reservoirsDF = reservoirsSelect(load_Reservoirs(),columns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh"], months=1)
+reservoirsDF = reservoirsSelect(load_Reservoirs(),columns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke","endring_fyllingsgrad"], months=1)
 columns = reservoirsDF.columns
 table_data = pd.DataFrame({
     "column": columns,

@@ -19,7 +19,7 @@ fullReservoirs = load_Reservoirs()
 # Select Box for Columns
 # fullColumns = fullReservoirs.columns.to_list()
 # fullColumns.append("All columns")
-fullColumns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh"] #for now reducing what can be displayed
+fullColumns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke","endring_fyllingsgrad"] #for now reducing what can be displayed
 
 optionsColumns = st.selectbox("Select what columns to display", fullColumns)
 
