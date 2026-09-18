@@ -1,26 +1,9 @@
-from os import name
-
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from plotly.graph_objs.layout import xaxis
 
 from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
-
-# Select Box for Columns
-# fullColumns = fullReservoirs.columns.to_list()
-# fullColumns.append("All columns")
-
-
-#slider
-fullReservoirs["dato_Id"] = pd.to_datetime(fullReservoirs["dato_Id"]).sort_values()
-minMonth = fullReservoirs["dato_Id"].min().month
-maxMonth = (fullReservoirs["dato_Id"].max().year-fullReservoirs["dato_Id"].min().year)*12+fullReservoirs["dato_Id"].max().month
-months = st.slider("Choose nr. of months to look at", minMonth, maxMonth)
-#
-#get & plotting data
-
 
 class PlotData:
     pd.options.plotting.backend = "plotly" #setting, cuz matplotlib be boring
@@ -54,7 +37,7 @@ class PlotData:
 
         # ActualStuff
         optionsColumns = st.selectbox("Select what columns to display", self.fullColumns)
-        self.plotData(optionsColumns,months=months)
+        self.plotData(optionsColumns,months=self.months)
         self.months = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
 
     def run(self):
