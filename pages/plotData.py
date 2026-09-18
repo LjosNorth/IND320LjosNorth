@@ -42,6 +42,7 @@ class PlotData:
 
     def run(self):
         self.renderPage()
+        st.write(self.months)
 
 
 if __name__ == "__main__":
