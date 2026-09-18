@@ -1,8 +1,11 @@
 from pathlib import Path
 import streamlit as st
 import pandas as pd
+
+from utils.UserRoles import UserRoles
 from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
+from utils.decorators import require_role
 
 class TabularData:
     '''class to render the tabular data page'''
@@ -32,6 +35,10 @@ class TabularData:
                 )
             }
         )
+
+    @require_role(UserRoles.USER)
+    def userInfo(self):
+        st.write("Only the goodest boy or girl can see this message :)")
 
     # Render Page
     def renderPage(self):
