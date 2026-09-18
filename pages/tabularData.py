@@ -1,6 +1,8 @@
 from pathlib import Path
 import streamlit as st
 import pandas as pd
+from PyQt6.QtCore.QUrl import userInfo
+from PyQt6.lupdate import user
 
 from utils.UserRoles import UserRoles
 from utils.reservoirsSelect import reservoirsSelect
@@ -48,6 +50,9 @@ class TabularData:
 
         #actual stuff
         self.showTable()
+
+        #UserShit
+        userInfo()
 
     def run(self):
         self.renderPage()
