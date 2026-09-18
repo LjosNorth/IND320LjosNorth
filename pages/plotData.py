@@ -39,6 +39,7 @@ class PlotData:
         optionsColumns = st.selectbox("Select what columns to display", self.fullColumns)
         self.plotData(optionsColumns,months=self.months)
         self.months = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
+        st.rerun()
 
     def run(self):
         self.renderPage()
