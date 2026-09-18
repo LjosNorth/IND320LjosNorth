@@ -50,7 +50,7 @@ class TabularData:
         self.showTable()
 
         #UserShit
-        userInfo()
+        self.userInfo()
 
     def run(self):
         self.renderPage()
