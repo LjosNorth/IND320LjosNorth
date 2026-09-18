@@ -9,7 +9,7 @@ from utils.decorators import require_role
 class TabularData:
     '''class to render the tabular data page'''
     def __init__(self):
-        self.columns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke","endring_fyllingsgrad"]
+        self.columns=["dato_Id", "fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"]
         self.months = 1
         self.reservoirsDF = reservoirsSelect(load_Reservoirs(), self.columns, self.months)
 

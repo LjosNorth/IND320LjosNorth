@@ -6,11 +6,17 @@ from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
 
 class PlotData:
-    pd.options.plotting.backend = "plotly" #setting, cuz matplotlib be boring
     def __init__(self):
+
+        # Data
         self.fullReservoirs = load_Reservoirs()
-        self.fullColumns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke","endring_fyllingsgrad"] #for now reducing what can be displayed
         self.fullReservoirs["dato_Id"] = pd.to_datetime(self.fullReservoirs["dato_Id"]).sort_values()
+
+        # Columns
+        self.fullColumns=["dato_Id", "fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"]
+        # self.fullColumns.add("All Columns")
+
+        # Months
         self.minMonth = self.fullReservoirs["dato_Id"].min().month
         self.maxMonth = (self.fullReservoirs["dato_Id"].max().year - self.fullReservoirs["dato_Id"].min().year) * 12 + self.fullReservoirs["dato_Id"].max().month
 
