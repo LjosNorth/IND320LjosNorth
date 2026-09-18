@@ -1,7 +1,7 @@
 # IND320LjosNorth Repo
 this is my repo the streamlit app
 
-folderstructure:
+folder structure:
 ```bash
 .
 ├── data
@@ -10,7 +10,7 @@ folderstructure:
 │   └── Notebook.ipynb
 ├── pages
 │   ├── home.py
-│   ├── page4.py
+│   ├── settings.py
 │   ├── plotData.py
 │   └── tabularData.py
 ├── utils
@@ -22,3 +22,5 @@ folderstructure:
 ├── requirements.txt
 └── streamlit_app.py
 ```
+:point_up: [Git Repository](https://github.com/ljosnorth/ind320ljosnorth/blob/main/streamlit_app.py)\
+:spider_web: [Streamlit website](https://github.com/LjosNorth/IND320LjosNorth/tree/main)
