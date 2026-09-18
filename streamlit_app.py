@@ -6,7 +6,7 @@ from utils.decorators import *
 if "userRole" not in st.session_state:
     st.session_state.userRole = UserRoles.VIEWER
 
-''' Pages '''
+#Pages
 pageHome = st.Page("pages/home.py", title="Home")
 pageTables = st.Page("pages/tabularData.py", title="Tables")
 pagePlots = st.Page("pages/plotData.py", title="Plots")
@@ -19,3 +19,17 @@ else:
 
 sidebar = st.navigation(pages, position="sidebar")
 sidebar.run()
+
+#Role Change Logic, for testing
+with st.sidebar:
+    st.divider()
+    st.subheader("Change Role")
+    if st.session_state.userRole != UserRoles.ADMIN:
+        if st.button("ADMIN"):
+            st.session_state.userRole = UserRoles.ADMIN
+    if st.session_state.userRole != UserRoles.USER:
+        if st.button("USER"):
+            st.session_state.userRole = UserRoles.USER
+    if st.session_state.userRole != UserRoles.VIEWER:
+        if st.button("VIEWER"):
+            st.session_state.userRole = UserRoles.VIEWER
