@@ -13,10 +13,6 @@ def reservoirsSelect(dataFrame:pd.DataFrame, columns:list[str]=[], months:int=0)
                 Dataframe with reservoirs data for selected months and columns
         '''
 
-        #this can be removed depending on how st.select_slider() works
-        if months < 0:
-            raise ValueError("months must be zero or greater")
-
         # df = df.dropna()
         dataFrame["dato_Id"] = pd.to_datetime(dataFrame["dato_Id"]) # converting string to datetime <class 'pandas.Timestamp'>
         dataFrame = grab_logic(dataFrame, columns, months)
@@ -53,6 +49,5 @@ def grab_logic(dataFrame:pd.DataFrame, columns:list[str], months:int) -> pd.Data
                 #DataFrame for relevant timeframe
                 dataFrame = dataFrame[(dataFrame["dato_Id"] >= startDate)& (dataFrame["dato_Id"] < endDate)]
 
-                if not columns:
-                        return dataFrame
+                if not columns: return dataFrame
                 else: return dataFrame[columns]
