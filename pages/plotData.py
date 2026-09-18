@@ -44,7 +44,7 @@ class PlotData:
         self.renderPage()
 
 
-if __name__ == "__main":
+if __name__ == "__main__":
     try:
         PlotData().run()
     except Exception as e:
