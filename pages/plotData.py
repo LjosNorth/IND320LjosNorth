@@ -13,7 +13,7 @@ class PlotData:
         self.fullReservoirs["dato_Id"] = pd.to_datetime(self.fullReservoirs["dato_Id"]).sort_values()
         self.minMonth = self.fullReservoirs["dato_Id"].min().month
         self.maxMonth = (self.fullReservoirs["dato_Id"].max().year - self.fullReservoirs["dato_Id"].min().year) * 12 + self.fullReservoirs["dato_Id"].max().month
-        self.months = self.minMonth
+        #self.months = self.minMonth
 
     def plotData(self, column:str, months:int=1):
         if column == "":
@@ -37,13 +37,12 @@ class PlotData:
 
         # ActualStuff
         optionsColumns = st.selectbox("Select what columns to display", self.fullColumns)
-        self.plotData(optionsColumns,months=self.months)
-        self.months = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
-        st.rerun()
+        months = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
+        self.plotData(optionsColumns,months=months)
+        s#elf.months = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
 
     def run(self):
         self.renderPage()
-        st.write(self.months)
 
 
 if __name__ == "__main__":
