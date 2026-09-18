@@ -22,14 +22,16 @@ sidebar.run()
 
 #Role Change Logic, for testing
 with st.sidebar:
-    st.divider()
-    st.subheader("Change Role")
+    st.write("Change Role")
     if st.session_state.userRole != UserRoles.ADMIN:
         if st.button("ADMIN"):
             st.session_state.userRole = UserRoles.ADMIN
+            st.rerun()
     if st.session_state.userRole != UserRoles.USER:
         if st.button("USER"):
             st.session_state.userRole = UserRoles.USER
+            st.rerun()
     if st.session_state.userRole != UserRoles.VIEWER:
         if st.button("VIEWER"):
             st.session_state.userRole = UserRoles.VIEWER
+            st.rerun()
