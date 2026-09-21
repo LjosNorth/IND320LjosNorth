@@ -61,7 +61,7 @@ class PlotData:
         )
 
         fig.update_layout(title_text="Reservoirs", showlegend=True)
-        fig.update_layout(height=1200)  # Increase as needed
+        fig.update_layout(height=600)  # Increase as needed
 
         # figure1
         fig.update_xaxes(title="fyllingsgrad", row=1, col=1)
