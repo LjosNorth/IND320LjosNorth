@@ -24,7 +24,7 @@ class PlotData:
     def plotData(self, column:str, months:int=1):
         if column == "":
             pass
-        elif column == "All columns":
+        elif column == "All Columns":
             reservoirs = reservoirsSelect(self.fullReservoirs, [], months)
             self.figureAllColumns(reservoirs)
         else:
