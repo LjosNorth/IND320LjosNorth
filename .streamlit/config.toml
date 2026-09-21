@@ -1,3 +1,4 @@
 [theme]
 base = "light"
-backgroundcolor = "#FFFDD0"
+backgroundColor = "#FFFDD0"
+primaryColor = "483C32"
