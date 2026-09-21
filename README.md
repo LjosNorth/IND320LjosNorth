@@ -2,8 +2,8 @@
 - Version: 0.X
 - Author: LjosNorth
 
-:point_up: [This Git Repository](https://github.com/ljosnorth/ind320ljosnorth/blob/main/streamlit_app.py)\
-:spider_web: [Streamlit website](https://github.com/LjosNorth/IND320LjosNorth/tree/main)
+:point_up: [This Git Repository](https://github.com/LjosNorth/IND320LjosNorth/tree/main)\
+:spider_web: [Streamlit website](https://ind320ljosnorth.streamlit.app/)
 ### Folder structure:
 ```bash
 .
