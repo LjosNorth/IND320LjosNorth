@@ -17,7 +17,7 @@ class PlotData:
         self.fullReservoirs["dato_Id"] = pd.to_datetime(self.fullReservoirs["dato_Id"]).sort_values()
 
         # Columns
-        self.fullColumns=["dato_Id", "fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"]
+        self.fullColumns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"]
         self.fullColumns.append("All Columns")
 
         # Months
