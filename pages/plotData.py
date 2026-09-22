@@ -5,7 +5,7 @@ import numpy as np
 
 from plotly.subplots import make_subplots
 from scipy.stats import gaussian_kde
-
+from utils.fixit import signlog
 from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
 
@@ -28,10 +28,11 @@ class PlotData:
         if column == "":
             pass
         elif column == "All Columns":
-            reservoirs = reservoirsSelect(self.fullReservoirs, [], months)
-            reservoirsLog = np.log2(reservoirs) # Scaling
-            reservoirsLog = pd.DataFrame(reservoirsLog)
-            self.figureAllColumns(reservoirsLog)
+            reservoirs = reservoirsSelect(self.fullReservoirs, ["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"], months)
+            # reservoirsLog = np.log2(reservoirs) # Scaling
+            # reservoirsLog = pd.DataFrame(reservoirsLog)
+            reservoirs = reservoirs.apply(signlog)
+            self.singlePlotAllColumns(reservoirs)
         else:
             reservoirs = reservoirsSelect(self.fullReservoirs, [column], months)
             fig = go.Figure(
@@ -91,8 +92,6 @@ class PlotData:
         st.plotly_chart(fig, use_container_width=True)
 
     def singlePlotAllColumns(self, reservoirs:pd.DataFrame):
-        fig.show()
-        # %%
         fig = go.Figure()
 
         # fig1
@@ -100,8 +99,9 @@ class PlotData:
         kde = gaussian_kde(dataFig1)
         x_range = np.linspace(dataFig1.min(), dataFig1.max(), 200)
         density = kde(x_range)
+        density = density / density.max()
         fig.add_trace(
-            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fig1")
+            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fyllingsgrad")
         )
 
         # fig2
@@ -109,8 +109,9 @@ class PlotData:
         kde = gaussian_kde(dataFig2)
         x_range = np.linspace(dataFig2.min(), dataFig2.max(), 200)
         density = kde(x_range)
+        density = density / density.max()
         fig.add_trace(
-            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fig2")
+            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fylling_TWh")
         )
 
         # fig3
@@ -118,17 +119,19 @@ class PlotData:
         kde = gaussian_kde(dataFig3)
         x_range = np.linspace(dataFig3.min(), dataFig3.max(), 200)
         density = kde(x_range)
+        density = density / density.max()
         fig.add_trace(
-            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fig3")
+            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fyllingsgrad_forrige_uke")
         )
 
         # fig4
         dataFig4 = reservoirs["endring_fyllingsgrad"]
         kde = gaussian_kde(dataFig4)
-        x_range = np.linspace(dataFig4.min(), dataFig4.max(), 200)
+        x_range = np.linspace(dataFig4.min(), dataFig4.max(), 50)
         density = kde(x_range)
+        density = density / density.max()
         fig.add_trace(
-            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fig4")
+            go.Scatter(x=x_range, y=density, fill="tozeroy", name="endring_fyllingsgrad")
         )
 
         # fig5
@@ -136,9 +139,12 @@ class PlotData:
         kde = gaussian_kde(dataFig5)
         x_range = np.linspace(dataFig5.min(), dataFig5.max(), 200)
         density = kde(x_range)
+        density = density / density.max()
         fig.add_trace(
-            go.Scatter(x=x_range, y=density, fill="tozeroy", name="fig5")
+            go.Scatter(x=x_range, y=density, fill="tozeroy", name="kapasitet_TWh")
         )
+
+        st.plotly_chart(fig, use_container_width=True)
 
     def renderPage(self):
         # FillerShit

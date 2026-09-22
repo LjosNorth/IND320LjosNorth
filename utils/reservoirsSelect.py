@@ -13,7 +13,7 @@ def reservoirsSelect(dataFrame:pd.DataFrame, columns:list[str]=[], months:int=0)
                 Dataframe with reservoirs data for selected months and columns
         '''
 
-        # df = df.dropna()
+        dataFrame = dataFrame.dropna()
         dataFrame["dato_Id"] = pd.to_datetime(dataFrame["dato_Id"]) # converting string to datetime <class 'pandas.Timestamp'>
         dataFrame = grab_logic(dataFrame, columns, months)
         return dataFrame
