@@ -10,7 +10,7 @@
 ├── data
 │   └── reservoirs.csv
 ├── notebooks
-│   └── Notebook.ipynb
+│   └── Oblig1.ipynb
 ├── pages
 │   ├── home.py
 │   ├── settings.py
