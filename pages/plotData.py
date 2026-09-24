@@ -3,13 +3,13 @@ import streamlit as st
 import plotly.graph_objects as go
 import numpy as np
 
-from plotly.subplots import make_subplots
 from scipy.stats import gaussian_kde
 from utils.fixit import signlog
 from utils.reservoirsSelect import reservoirsSelect
 from utils.dataLoaders import load_Reservoirs
 
 class PlotData:
+    '''class for the plotdata page'''
     def __init__(self):
 
         # Data
@@ -24,13 +24,13 @@ class PlotData:
         self.minMonth = self.fullReservoirs["dato_Id"].min().month
         self.maxMonth = (self.fullReservoirs["dato_Id"].max().year - self.fullReservoirs["dato_Id"].min().year) * 12 + self.fullReservoirs["dato_Id"].max().month
 
+
     def plotData(self, column:str, months:int=1):
+        '''plotting based on selectbox | columns'''
         if column == "":
             pass
         elif column == "All Columns":
             reservoirs = reservoirsSelect(self.fullReservoirs, ["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"], months)
-            # reservoirsLog = np.log2(reservoirs) # Scaling
-            # reservoirsLog = pd.DataFrame(reservoirsLog)
             reservoirs = reservoirs.apply(signlog)
             self.singlePlotAllColumns(reservoirs)
         else:
@@ -40,58 +40,10 @@ class PlotData:
             )
             fig.update_xaxes(title_text=column)
             fig.update_yaxes(title_text="count")
-            fig.show()
             st.plotly_chart(fig)
 
-    def subplotsAllColumns(self, reservoirs:pd.DataFrame):
-        fig = make_subplots(rows=3, cols=2)
-        fig.add_trace(
-            go.Histogram(x=reservoirs["fyllingsgrad"], name="fyllingsgrad"),
-            row=1, col=1
-        )
-        fig.add_trace(
-            go.Histogram(x=reservoirs["fylling_TWh"], name="fylling_TWh"),
-            row=1, col=2
-        )
-        fig.add_trace(
-            go.Histogram(x=reservoirs["fyllingsgrad_forrige_uke"], name="fyllingsgrad_forrige_uke"),
-            row=2, col=1
-        )
-        fig.add_trace(
-            go.Histogram(x=reservoirs["endring_fyllingsgrad"], name="endring_fyllingsgrad"),
-            row=2, col=2
-        )
-        fig.add_trace(
-            go.Histogram(x=reservoirs["kapasitet_TWh"], name="kapasitet_TWh"),
-            row=3, col=1
-        )
-
-        fig.update_layout(title_text="Reservoirs", showlegend=True)
-        fig.update_layout(height=700)  # Increase as needed
-
-        # figure1
-        fig.update_xaxes(title="fyllingsgrad", row=1, col=1)
-        fig.update_yaxes(title="count", row=1, col=1)
-
-        # figure2
-        fig.update_xaxes(title="fylling_TWh", row=1, col=2)
-        fig.update_yaxes(title="count", row=1, col=2)
-
-        # figure3
-        fig.update_xaxes(title="fyllingsgrad_forrige_uke", row=2, col=1)
-        fig.update_yaxes(title="count", row=2, col=1)
-
-        # figure4
-        fig.update_xaxes(title="endring_fyllingsgrad", row=2, col=2)
-        fig.update_yaxes(title="count", row=2, col=2)
-
-        # figure5
-        fig.update_xaxes(title="kapasitet_TWh", row=3, col=1)
-        fig.update_yaxes(title="count", row=3, col=1)
-
-        st.plotly_chart(fig, use_container_width=True)
-
     def singlePlotAllColumns(self, reservoirs:pd.DataFrame):
+        '''plotting all the columns'''
         fig = go.Figure()
 
         # fig1
@@ -147,16 +99,18 @@ class PlotData:
         st.plotly_chart(fig, use_container_width=True)
 
     def renderPage(self):
+        '''render the page'''
         # FillerShit
         st.title("Nullam ac ornare tellus.")
         st.write("Duis eget sollicitudin justo. Pellentesque aliquam congue turpis sed aliquet. Etiam vitae nulla non sem elementum vulputate. ")
 
         # ActualStuff
         optionsColumns = st.selectbox("Select what columns to display", self.fullColumns)
-        months = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
-        self.plotData(optionsColumns,months=months)
+        self.plotData(optionsColumns,months=st.session_state.plotMonths)
+        st.session_state.plotMonths = st.slider("Choose nr. of months to look at", self.minMonth, self.maxMonth)
 
     def run(self):
+        '''run the page'''
         self.renderPage()
 
 

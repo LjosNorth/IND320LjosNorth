@@ -14,12 +14,14 @@ class TabularData:
         self.reservoirsDF = reservoirsSelect(load_Reservoirs(), self.columns, self.months)
 
     def tabularData(self):
+        '''function to rotate the DF'''
         return pd.DataFrame({
             "column": self.columns,
             "first month": [self.reservoirsDF[columns].tolist() for columns in self.reservoirsDF.columns]
         })
 
     def showTable(self):
+        '''function to show the table'''
         tabularData = self.tabularData()
         st.dataframe(
             tabularData,
@@ -37,10 +39,12 @@ class TabularData:
 
     @require_role(UserRoles.USER)
     def userInfo(self):
+        '''silly use of roles for funnsies'''
         st.write("Only the goodest boy or girl can see this message :)")
 
     # Render Page
     def renderPage(self):
+        '''function to render the page'''
         #dummy text
         st.title("Mauris lorem")
         st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eros purus, sagittis in finibus eu, ultricies sit amet nisi. Cras at sagittis eros.")
@@ -52,6 +56,7 @@ class TabularData:
         self.userInfo()
 
     def run(self):
+        '''function to run the page'''
         self.renderPage()
 
 if __name__ == "__main__":
