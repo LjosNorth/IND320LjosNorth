@@ -1,5 +1,5 @@
 # IND320LjosNorth Repo
-- Version: 1.0
+- Version: 1.0.1
 - Author: LjosNorth
 
 :point_up: [This Git Repository](https://github.com/LjosNorth/IND320LjosNorth/tree/main)\
@@ -17,7 +17,6 @@
 │   ├── Oblig1.html
 │   └── Oblig1ScreenCast.mp4
 ├── pages
-│   ├── __pycache__
 │   ├── home.py
 │   ├── plotData.py
 │   ├── settings.py
