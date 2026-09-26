@@ -1,5 +1,5 @@
 # IND320LjosNorth Repo
-- Version: 0.X
+- Version: 1.0
 - Author: LjosNorth
 
 :point_up: [This Git Repository](https://github.com/LjosNorth/IND320LjosNorth/tree/main)\
@@ -7,21 +7,30 @@
 ### Folder structure:
 ```bash
 .
+├── .streamlit
+│   └── config.toml
 ├── data
 │   └── reservoirs.csv
 ├── notebooks
 │   └── Oblig1.ipynb
+├── Oblig
+│   ├── Oblig1.html
+│   └── Oblig1ScreenCast.mp4
 ├── pages
+│   ├── __pycache__
 │   ├── home.py
-│   ├── settings.py
 │   ├── plotData.py
+│   ├── settings.py
 │   └── tabularData.py
 ├── utils
 │   ├── dataLoaders.py
 │   ├── decorators.py
+│   ├── fixit.py
 │   ├── reservoirsSelect.py
+│   ├── sessionstatehandler.py
 │   └── UserRoles.py
 ├── README.md
 ├── requirements.txt
 └── streamlit_app.py
+
 ```
