@@ -1,7 +1,12 @@
+'''
+enumeration for userroles
+'''
+
 from enum import Enum
 
 # UserRoles
 class UserRoles(Enum):
-    ADMIN = 3 # Admin
+    VIEWER = 1  # Default, visiting the page
     USER = 2 # Logged-in User
-    VIEWER = 1 # Default, visiting the page
+    ADMIN = 3 # Admin
+    SECRET = 4 # shh im not here

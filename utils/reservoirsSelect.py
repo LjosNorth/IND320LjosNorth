@@ -1,3 +1,7 @@
+'''
+logic for extracting y colums and x months from the reservoirs data
+'''
+
 import pandas as pd
 import streamlit as st
 
@@ -14,7 +18,7 @@ def reservoirsSelect(dataFrame:pd.DataFrame, columns:list[str]=[], months:int=0)
         '''
 
         dataFrame = dataFrame.dropna()
-        dataFrame["dato_Id"] = pd.to_datetime(dataFrame["dato_Id"]) # converting string to datetime <class 'pandas.Timestamp'>
+        dataFrame["date (y-m-d)"] = pd.to_datetime(dataFrame["date (y-m-d)"]) # converting string to datetime <class 'pandas.Timestamp'>
         dataFrame = grab_logic(dataFrame, columns, months)
         return dataFrame
 
@@ -37,7 +41,7 @@ def grab_logic(dataFrame:pd.DataFrame, columns:list[str], months:int) -> pd.Data
                         years = (months//12)-1
 
                 #startDate for query
-                startDate = dataFrame["dato_Id"].sort_values().iloc[0]
+                startDate = dataFrame["date (y-m-d)"].sort_values().iloc[0]
                 firstYear = startDate.year
                 firstMonth = startDate.month
 
@@ -47,7 +51,7 @@ def grab_logic(dataFrame:pd.DataFrame, columns:list[str], months:int) -> pd.Data
                 endDate = pd.Timestamp(year=endYear,month=endMonth,day=1)+pd.offsets.MonthBegin()
 
                 #DataFrame for relevant timeframe
-                dataFrame = dataFrame[(dataFrame["dato_Id"] >= startDate)& (dataFrame["dato_Id"] < endDate)]
+                dataFrame = dataFrame[(dataFrame["date (y-m-d)"] >= startDate)& (dataFrame["date (y-m-d)"] < endDate)]
 
                 if not columns: return dataFrame
                 else: return dataFrame[columns]

@@ -1,3 +1,8 @@
+'''
+Home page
+greeting visitors, for now has no utility
+'''
+
 import streamlit as st
 
 st.title("Aliquam erat volutpat.")

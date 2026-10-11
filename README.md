@@ -1,5 +1,5 @@
 # IND320LjosNorth Repo
-- Version: 1.0.1
+- Version: 1.1.0
 - Author: LjosNorth
 
 :point_up: [This Git Repository](https://github.com/LjosNorth/IND320LjosNorth/tree/main)\
@@ -12,10 +12,12 @@
 ├── data
 │   └── reservoirs.csv
 ├── notebooks
-│   └── Oblig1.ipynb
+│   ├── Oblig1.ipynb
+│   └── Oblig2.ipynb
 ├── Oblig
-│   ├── Oblig1.html
-│   └── Oblig1ScreenCast.mp4
+│   └── Oblig1
+│       ├── Oblig1.html
+│       └── Oblig1ScreenCast.mp4
 ├── pages
 │   ├── home.py
 │   ├── plotData.py
@@ -28,8 +30,12 @@
 │   ├── reservoirsSelect.py
 │   ├── sessionstatehandler.py
 │   └── UserRoles.py
+├── pyproject.toml
 ├── README.md
-├── requirements.txt
-└── streamlit_app.py
+├── streamlit_app.py
+└── uv.lock
+
 
 ```
+
+Work started on oblig 2 - Read [Changelog](CHANGELOG.md)

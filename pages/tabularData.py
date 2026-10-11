@@ -1,17 +1,21 @@
+'''
+tabular data page, shows a table for the first month of data from water magazines throughout Norway
+'''
+
 import streamlit as st
 import pandas as pd
 
 from utils.UserRoles import UserRoles
 from utils.reservoirsSelect import reservoirsSelect
-from utils.dataLoaders import load_Reservoirs
+from utils.dataLoaders import load_magazine_data_api
 from utils.decorators import require_role
 
 class TabularData:
     '''class to render the tabular data page'''
     def __init__(self):
-        self.columns=["fyllingsgrad", "kapasitet_TWh", "fylling_TWh", "fyllingsgrad_forrige_uke", "endring_fyllingsgrad"]
+        self.columns=["filled degree", "capacity_Twh", "fill_Twh", "filled degree last week", "change in filled degree"]
         self.months = 1
-        self.reservoirsDF = reservoirsSelect(load_Reservoirs(), self.columns, self.months)
+        self.reservoirsDF = reservoirsSelect(load_magazine_data_api(), self.columns, self.months)
 
     def tabularData(self):
         '''function to rotate the DF'''
@@ -37,7 +41,7 @@ class TabularData:
             }
         )
 
-    @require_role(UserRoles.USER)
+    @require_role(UserRoles.SECRET)
     def userInfo(self):
         '''silly use of roles for funnsies'''
         st.write("Only the goodest boy or girl can see this message :)")
@@ -45,9 +49,6 @@ class TabularData:
     # Render Page
     def renderPage(self):
         '''function to render the page'''
-        #dummy text
-        st.title("Mauris lorem")
-        st.write("elis, consectetur id mollis sit amet, vulputate non libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris eros purus, sagittis in finibus eu, ultricies sit amet nisi. Cras at sagittis eros.")
 
         #actual stuff
         self.showTable()

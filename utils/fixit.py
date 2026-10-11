@@ -1,3 +1,7 @@
+'''
+if this still exists for the second hand it is a mistake and you reading this must now legally seek me out and punch me for being stupid
+'''
+
 import numpy as np
 
 # log scaling function preserving sign

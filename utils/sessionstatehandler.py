@@ -1,3 +1,7 @@
+'''
+file that initilizes various session states used on the page
+'''
+
 import streamlit as st
 from utils.UserRoles import UserRoles
 
