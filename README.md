@@ -16,9 +16,12 @@
 │   ├── Oblig1.ipynb
 │   └── Oblig2.ipynb
 ├── Oblig
-│   └── Oblig1
-│       ├── Oblig1.html
-│       └── Oblig1ScreenCast.mp4
+│   ├── Oblig1
+│   │   ├── Oblig1.html
+│   │   └── Oblig1ScreenCast.mp4
+│   └── Oblig2
+│       ├── 2026-10-20 ind320Oblig2.mp4
+│       └── Oblig2.html
 ├── pages
 │   ├── home.py
 │   ├── plotData.py
