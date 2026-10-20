@@ -50,6 +50,12 @@ class TabularData:
     def renderPage(self):
         '''function to render the page'''
 
+        st.set_page_config(
+            page_title="Plots",
+            page_icon="📊",
+            layout="centered",
+        )
+
         #actual stuff
         self.showTable()
 

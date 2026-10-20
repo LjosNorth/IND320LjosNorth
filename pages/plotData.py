@@ -25,6 +25,17 @@ class PlotData:
         self.minMonth = self.fullReservoirs["date (y-m-d)"].min().month
         self.maxMonth = (self.fullReservoirs["date (y-m-d)"].max().year - self.fullReservoirs["date (y-m-d)"].min().year) * 12 + self.fullReservoirs["date (y-m-d)"].max().month
 
+        # Regions
+        self.regionToPlot = None
+
+        # Date range for the date/month slider options
+        min_date = self.fullReservoirs["date (y-m-d)"].min()
+        max_date = self.fullReservoirs["date (y-m-d)"].max()
+
+        # Generate all month options (YYYY-MM)
+        self.month_range = pd.period_range(start=min_date, end=max_date, freq="M")
+        self.month_options = [p.strftime("%Y-%m") for p in self.month_range]
+
     def processData(self, dataframe:pd.DataFrame) -> dict:
         # changing columns and subdividing columns
 
@@ -107,47 +118,64 @@ class PlotData:
 
         st.plotly_chart(fig, use_container_width=True)
 
-    def renderPage(self):
-        '''render the page'''
+    def renderCol1(self):
+        # Create columns: 2 empty (left), 1 for content (right)
+        empty1, empty2, content = st.columns([1, 1, 1])
 
-        #getting region
-        regionsDict = self.processData(self.fullReservoirs)
-        regionNames = list(regionsDict.keys())
-        optionsRegions = st.selectbox("Select what Region to display", regionNames)
-        region = regionsDict[optionsRegions]
+        with content:
+            regionsDict = self.processData(self.fullReservoirs)
+            regionNames = list(regionsDict.keys())
+            optionsRegions = st.radio("Choose a region", regionNames, horizontal=False)
+            self.regionToPlot = regionsDict[optionsRegions]
+            if optionsRegions == "VASS":
+                st.caption("I should split VASS into 5 regions probably")
 
-        if optionsRegions == "VASS":
-            st.caption("I should split VASS into 5 regions probably")
+    def renderCol2(self):
+        '''render column 1'''
 
         #getting colums
         st.space()
         optionsColumns = st.selectbox("Select what columns to display", self.fullColumns)
 
         # plotting
-        self.plotData(region= region, column=optionsColumns, months=st.session_state.plotMonths)
+        self.plotData(region= self.regionToPlot, column=optionsColumns, months=st.session_state.plotMonths)
 
         # getting months
-        st.session_state.plotMonths = st.slider("Choose range of time", self.minMonth, self.maxMonth)
+        # st.session_state.plotMonths = st.slider("Choose range of time", self.minMonth, self.maxMonth)
 
-        # Consider later if i want to make the following work or no
+        selected_range = st.select_slider(
+            "Choose range of time",
+            options=self.month_options,
+            value=(self.month_options[0], self.month_options[-1])
+        )
 
-        # # 1. Generate the year-month options
-        # month_range = pd.period_range(start=self.minMonth, end=self.maxMonth, freq="M")
-        # month_options = [p.strftime("%Y-%m") for p in month_range]
-        #
-        # # 2. Render the select slider for range selection
-        # selected_range = st.select_slider(
-        #     "Choose range of time",
-        #     options=month_options,
-        #     value=(month_options[0], month_options[-1])
-        # )
-        #
-        # # 3. Calculate the integer number of months (inclusive)
-        # start_period = pd.Period(selected_range[0], freq="M")
-        # end_period = pd.Period(selected_range[1], freq="M")
-        #
-        # # Store the total count as an integer in session state
-        # st.session_state.plotMonths = (end_period - start_period).n + 1
+        # 2. Calculate the integer number of months (inclusive) from the selected dates
+        start_period = pd.Period(selected_range[0], freq="M")
+        end_period = pd.Period(selected_range[1], freq="M")
+        st.session_state.plotMonths = (end_period - start_period).n + 1
+
+    def renderCol3(self):
+        pass
+
+    def renderPage(self):
+        '''reder the structure of the page'''
+        st.set_page_config(
+            page_title="Plots",
+            page_icon="📊",
+            layout="wide",
+        )
+
+        col1, col2, col3 = st.columns([1,2,1])
+
+        with col1:
+            self.renderCol1()
+
+        with col2:
+            self.renderCol2()
+
+        with col3:
+            self.renderCol3()
+
 
     def run(self):
         '''run the page'''

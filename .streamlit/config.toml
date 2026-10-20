@@ -1,2 +1,48 @@
+# Theme Credit: https://github.com/jmedia65/awesome-streamlit-themes/tree/main - Edited by AI
+
+[server]
+enableStaticServing = true
+
+[[theme.fontFaces]]
+family = "Orbitron"
+url = "app/static/Orbitron-Regular.ttf"
+style = "normal"
+weight = 400
+
+[[theme.fontFaces]]
+family = "Orbitron"
+url = "app/static/Orbitron-Medium.ttf"
+style = "normal"
+weight = 500
+
+[[theme.fontFaces]]
+family = "SourceCodePro"
+url = "app/static/SourceCodePro-Regular.ttf"
+style = "normal"
+weight = 400
+
+[[theme.fontFaces]]
+family = "SourceCodePro"
+url = "app/static/SourceCodePro-Bold.ttf"
+style = "normal"
+weight = 700
+
 [theme]
-base = "dark"
+# 🌙 GROOVY DARK RETRO 70s PALETTE 🌙
+primaryColor = "#d4752f"             # Warm burnt orange
+backgroundColor = "#1a1410"          # Very dark brown (wood paneling vibes)
+secondaryBackgroundColor = "#2a2117" # Slightly lighter dark brown
+textColor = "#f5e6d3"                # Warm cream/beige text
+linkColor = "#e8a040"                # Warm gold
+borderColor = "#b8860b"              # Dark goldenrod
+showWidgetBorder = true
+baseRadius = "0.5rem"                # Soft, rounded - organic 70s feel
+font = "Orbitron"                    # Groovy font
+headingFont = "Orbitron"             # Consistent throughout
+codeFont = "SourceCodePro"           # Monospace for code
+codeBackgroundColor = "#2a2117"      # Dark brown for code blocks
+showSidebarBorder = true
+
+[theme.sidebar]
+backgroundColor = "#2a2117"          # Slightly lighter dark brown
+secondaryBackgroundColor = "#1a1410" # Deeper sections

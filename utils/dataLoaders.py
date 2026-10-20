@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 import requests
+from pymongo import MongoClient
 
 # loading the reservoirs data
 @st.cache_data
@@ -33,3 +34,21 @@ def load_magazine_data_api():
         "endring_fyllingsgrad": "change in filled degree"
     })
     return magasinDF
+
+@st.cache_data
+def load_mongoDB_Data():
+    '''loads ENTSO_E data from MongoDB'''
+    USR = st.secrets["usernameMongoDB"]
+    PWD = st.secrets["passwordMongoDB"]
+    uri = f"mongodb+srv://{USR}:{PWD}@ind320db.peyqaxm.mongodb.net/?appName=IND320DB"
+    client = MongoClient(uri)
+
+    database = client["entsoE"]
+    collection = database["tranmissionData"]
+
+    data = pd.DataFrame(list(collection.find()))
+    # data = pd.to_datetime(data["time"])
+
+    client.close()
+
+    return data

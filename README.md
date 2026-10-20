@@ -1,5 +1,5 @@
 # IND320LjosNorth Repo
-- Version: 1.1.0
+- Version: 2.0
 - Author: LjosNorth
 
 :point_up: [This Git Repository](https://github.com/LjosNorth/IND320LjosNorth/tree/main)\
@@ -8,7 +8,8 @@
 ```bash
 .
 ├── .streamlit
-│   └── config.toml
+│   ├── config.toml
+│   └── secrets.toml
 ├── data
 │   └── reservoirs.csv
 ├── notebooks
@@ -22,7 +23,8 @@
 │   ├── home.py
 │   ├── plotData.py
 │   ├── settings.py
-│   └── tabularData.py
+│   ├── tabularData.py
+│   └── transmissionsPlot.py
 ├── utils
 │   ├── dataLoaders.py
 │   ├── decorators.py
@@ -30,12 +32,14 @@
 │   ├── reservoirsSelect.py
 │   ├── sessionstatehandler.py
 │   └── UserRoles.py
+├── CHANGELOG.md
 ├── pyproject.toml
 ├── README.md
 ├── streamlit_app.py
 └── uv.lock
 
 
+
 ```
 
-Work started on oblig 2 - Read [Changelog](CHANGELOG.md)
+Work done for oblig 2 - Read [Changelog](CHANGELOG.md)

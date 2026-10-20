@@ -11,6 +11,11 @@ class SessionState:
         # initiate role
         if "userRole" not in st.session_state:
             st.session_state.userRole = UserRoles.VIEWER
+
+        # don worry abt it
+        if "roleHist" not in st.session_state:
+            st.session_state.roleHist = []
+
         # initiate plotmonths
         if "plotMonths" not in st.session_state:
             st.session_state.plotMonths = 1
