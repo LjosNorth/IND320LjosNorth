@@ -45,4 +45,4 @@
 
 ```
 
-Work done for oblig 2 - Read [Changelog](CHANGELOG.md)
+Starting Oblig 3 - (not yet) Read [Changelog](CHANGELOG.md)
