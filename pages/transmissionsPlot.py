@@ -1,127 +1,167 @@
 '''page for displaying the entsoE data'''
-from copy import copy
-from xmlrpc import client
 
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+
 from utils.dataLoaders import load_mongoDB_Data
+
+# [column towards Norway, column away from Norway]
+CONNECTIONS = {
+    "DE/LU ↔ NO_2": ["de_lu_to_no_2", "no_2_to_de_lu"],
+    "DK ↔ NO_2": ["dk_1_to_no_2", "no_2_to_dk_1"],
+    "FI ↔ NO_4": ["fi_to_no_4", "no_4_to_fi"],
+    "GB ↔ NO_2": ["gb_to_no_2", "no_2_to_gb"],
+    "NL ↔ NO_2": ["nl_to_no_2", "no_2_to_nl"],
+    "SE ↔ NO_1": ["se_3_to_no_1", "no_1_to_se_3"],
+}
+
+# Hydrological years run October -> September
+MONTHS = [
+    "October",
+    "November",
+    "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+]
 
 
 class TransmissionPlot:
     def __init__(self):
         self.transmissions = load_mongoDB_Data()
 
-    def pieChart(self, label: str, columnNames: list, connectionDF: pd.DataFrame):
-        # Reshape data for pie chart
+        # Filled in by renderCol1 and reused by renderCol2
+        self.connection = None
+        self.connectionColumns = None
+        self.yearStart = None
+
+        self.availableYears = self.yearStarts(self.transmissions)
+
+    @staticmethod
+    def yearStarts(dataFrame: pd.DataFrame) -> list[int]:
+        '''Return the start year of every October -> September year in the data.'''
+        if dataFrame.empty or "time" not in dataFrame.columns:
+            return []
+
+        startYears = dataFrame["time"].dt.year.where(
+            dataFrame["time"].dt.month >= 10,
+            dataFrame["time"].dt.year - 1,
+        )
+        return sorted(int(year) for year in startYears.unique())
+
+    @staticmethod
+    def yearLabel(startYear: int) -> str:
+        '''e.g. 2024 -> "2024-2025"'''
+        return f"{startYear}-{startYear + 1}"
+
+    def yearData(self, startYear: int) -> pd.DataFrame:
+        '''Rows belonging to one October -> September year.'''
+        dataFrame = self.transmissions.copy()
+        dataFrame["yearStart"] = dataFrame["time"].dt.year.where(
+            dataFrame["time"].dt.month >= 10,
+            dataFrame["time"].dt.year - 1,
+        )
+        return dataFrame[dataFrame["yearStart"] == startYear]
+
+    def pieChart(self, label: str, totalIn: float, totalOut: float, rangeLabel: str):
+        '''In/out totals for one connection and one year.'''
         data = pd.DataFrame({
-            'category': ['In', 'Out'],
-            'values': [connectionDF[columnNames[0]].sum(), connectionDF[columnNames[1]].sum()]
+            "category": ["In", "Out"],
+            "values": [totalIn, totalOut],
         })
-        fig = px.pie(data, values="values", names="category", title=label)
-        st.plotly_chart(fig)
+        fig = px.pie(
+            data,
+            values="values",
+            names="category",
+            title=f"{label} · {rangeLabel}",
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
-    def lineChart(self, df):
-        df = df.set_index("time").resample("D").mean(numeric_only=True).reset_index()
-
-        y=[
-            "de_lu_to_no_2", "no_2_to_de_lu",
-            "dk_1_to_no_2", "no_2_to_dk_1",
-            "fi_to_no_4", "no_4_to_fi",
-            "gb_to_no_2", "no_2_to_gb",
-            "nl_to_no_2", "no_2_to_nl",
-            "se_3_to_no_1", "no_1_to_se_3"
-        ]
-        fig = px.line(df, x="time", y=y)
-        # fig = px.line(df, x="time", y=["de_lu_to_no_2", "no_2_to_de_lu"])
-        st.plotly_chart(fig)
+    def lineChart(self, dataFrame: pd.DataFrame, columns: list[str]):
+        '''Daily averages keep the plot readable (same as the notebook).'''
+        dataFrame = (
+            dataFrame.set_index("time")
+            .resample("D")
+            .mean(numeric_only=True)
+            .reset_index()
+        )
+        fig = px.line(dataFrame, x="time", y=columns)
+        st.plotly_chart(fig, use_container_width=True)
 
     def renderCol1(self):
-        connectionsList = {
-            "DE/LU ↔ NO_2": ["de_lu_to_no_2", "no_2_to_de_lu"],
-            "DK ↔ NO_2": ["dk_1_to_no_2", "no_2_to_dk_1"],
-            "FI ↔ NO_4": ["fi_to_no_4", "no_4_to_fi"],
-            "GB ↔ NO_2": ["gb_to_no_2", "no_2_to_gb"],
-            "NL ↔ NO_2": ["nl_to_no_2", "no_2_to_nl"],
-            "SE ↔ NO_1": ["se_3_to_no_1","no_1_to_se_3"],
-        }
-        optionConnection = st.radio("pick a connection", connectionsList, horizontal=True)
-        optionConnectionvalue = connectionsList[optionConnection]
-        # st.caption(optionConnection)
-        # st.space()
+        '''Connection + year controls and the in/out pie chart.'''
+        self.connection = st.radio(
+            "pick a connection", list(CONNECTIONS), horizontal=True
+        )
+        self.connectionColumns = CONNECTIONS[self.connection]
 
-        years = ["2024-2025", "2025-2026"]
-        selectedTime = st.pills("pick a time span", years)
+        labels = [self.yearLabel(year) for year in self.availableYears]
+        if not labels:
+            st.info("No transmission data found in MongoDB.")
+            return
 
-        minDate = self.transmissions["time"].min()
-        cutoffDate = minDate + pd.DateOffset(years=1)
-        if selectedTime == "2024-2025":
-            selectedYearDF = self.transmissions[self.transmissions["time"]<cutoffDate]
-        else:
-            selectedYearDF = self.transmissions[self.transmissions["time"]>=cutoffDate]
+        # "a different control to select the year"
+        label = st.selectbox("pick a year", labels)
+        self.yearStart = self.availableYears[labels.index(label)]
 
-        # selectedYearDF.sort_values(by="time", inplace=True)
-        selectedYearDF.dropna(inplace=True)
+        yearDF = self.yearData(self.yearStart).dropna(subset=self.connectionColumns)
+        if yearDF.empty:
+            st.info("No data for this connection/year.")
+            return
 
-        connection = selectedYearDF[[optionConnectionvalue[0], optionConnectionvalue[1]]]
+        # 15-minute MW samples -> MWh
+        totalIn = yearDF[self.connectionColumns[0]].sum() * 0.25
+        totalOut = yearDF[self.connectionColumns[1]].sum() * 0.25
 
-        if selectedTime:
-            try:
-                self.pieChart(optionConnection, optionConnectionvalue, connection)
-            except Exception as e:
-                st.write(e)
+        self.pieChart(self.connection, totalIn, totalOut, label)
 
     def renderCol2(self):
-        st.write ("Choose months to display in the diagram")
-        st.write("2024-2025")
-        monthsListFirst = ['October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September'] # Hardcoded, could make a better solution probs, but lazy
-        monthsChoosenFirst = st.pills("choice which months to display", monthsListFirst, selection_mode="multi", key="FirstYearPill", label_visibility="collapsed")
+        '''Month pills and the line plot for the selected connection/year.'''
+        if self.yearStart is None:
+            return
 
-        st.write("2025-2026")
-        monthsListLast = ['October', 'November', 'December', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September']
-        monthsChoosenLast = st.pills("", monthsListLast, selection_mode="multi", key="SecondYearPill", label_visibility="collapsed")
+        st.write("Choose months to display in the diagram")
+        monthsChoosen = st.pills(
+            "Choose which months to display",
+            MONTHS,
+            selection_mode="multi",
+            key="transmissionMonths",
+            label_visibility="collapsed",
+        )
+        if not monthsChoosen:
+            st.info("Pick at least one month.")
+            return
 
-        col2DF = copy(self.transmissions)
-        col2DF.dropna(inplace=True)
-        col2DF.sort_values(by="time", inplace=True)
-        col2DF["month"] = col2DF['time'].dt.strftime('%B')
-        col2DF['year'] = col2DF['time'].dt.year
+        yearDF = self.yearData(self.yearStart)
+        yearDF["month"] = yearDF["time"].dt.strftime("%B")
 
-        # Determine which year range each row belongs to
-        # (Oct-Dec is previous year, Jan-Sep is current year)
-        def get_year_range(row):
-            month = row['month']
-            year = row['year']
-            if month in ['October', 'November', 'December']:
-                return year  # e.g., 2024 for Oct 2024 = 2024-2025 range
-            else:
-                return year - 1  # e.g., 2024 for Jan 2025 = 2024-2025 range
-
-        col2DF['year_range'] = col2DF.apply(get_year_range, axis=1)
-
-        # Filter based on selections
-        filtered_df = col2DF[
-            ((col2DF['year_range'] == 2024) & (col2DF['month'].isin(monthsChoosenFirst))) |
-            ((col2DF['year_range'] == 2025) & (col2DF['month'].isin(monthsChoosenLast)))
+        # Only the selected connection, not all twelve columns
+        plotDF = (
+            yearDF[yearDF["month"].isin(monthsChoosen)][
+                ["time", *self.connectionColumns]
             ]
+            .dropna()
+        )
 
-        # st.dataframe(filtered_df)
-        df = filtered_df.drop(columns=['month', 'year', 'year_range'])
-        # st.dataframe(df)
+        if plotDF.empty:
+            st.info("No data for the chosen months.")
+            return
 
-        if monthsChoosenFirst or monthsChoosenLast:
-            try:
-                self.lineChart(df)
-                st.caption("i think this looks chaotic, but the task does not ask me to include a connection choose option here")
-            except Exception as e:
-                st.write(e)
+        self.lineChart(plotDF, self.connectionColumns)
 
     def renderPage(self):
         '''render the page'''
         st.set_page_config(
-            page_title="Transmission Plots",
+            page_title="Transmission plots",
             page_icon="📈",
-            layout="centered",
+            layout="wide",
         )
 
         col1, col2 = st.columns(2)
@@ -132,16 +172,18 @@ class TransmissionPlot:
         with col2:
             self.renderCol2()
 
-        #extra shits
-        # st.dataframe(self.transmissions)
         with st.expander("Sources"):
-            source = '''
-            This data is sourced from the [ENTSO-E](https://transparency.entsoe.eu/) API
-            '''
-            st.markdown(source, unsafe_allow_html=True)
+            st.markdown(
+                "This data is sourced from the "
+                "[ENTSO-E Transparency Platform](https://transparency.entsoe.eu/) API. "
+                "In/out totals are calculated from 15-minute cross-border flow samples "
+                "(MW × 0.25 h = MWh)."
+            )
+
     def run(self):
         '''run the page'''
         self.renderPage()
+
 
 if __name__ == "__main__":
     try:

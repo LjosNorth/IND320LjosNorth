@@ -1,57 +1,39 @@
 '''
-logic for extracting y colums and x months from the reservoirs data
+logic for extracting y columns and x months from the reservoirs data
 '''
 
 import pandas as pd
-import streamlit as st
 
-def reservoirsSelect(dataFrame:pd.DataFrame, columns:list[str]=[], months:int=0) -> pd.DataFrame:
-        '''importing reservoirs data, then grabbing columns based on months and desired column output
 
-        Parameters:
-                 dataFrame: dataframe with reservoirs data
-                 columns (list[str], optional): list of columns to grab, default to grab all columns
-                 months (int, optional): number of months to grab, default to all months
+def reservoirsSelect(dataFrame: pd.DataFrame, columns: list[str] | None = None,
+                     start=None, end=None) -> pd.DataFrame:
+    '''Grab the requested columns for the requested date interval.
 
-        Returns:
-                Dataframe with reservoirs data for selected months and columns
-        '''
+    Replaces the old "N months from the first row" logic, which always
+    started at 1995 no matter which range the slider showed.
 
-        dataFrame = dataFrame.dropna()
-        dataFrame["date (y-m-d)"] = pd.to_datetime(dataFrame["date (y-m-d)"]) # converting string to datetime <class 'pandas.Timestamp'>
-        dataFrame = grab_logic(dataFrame, columns, months)
-        return dataFrame
+    Parameters:
+        dataFrame: dataframe with reservoirs data
+        columns (list[str], optional): columns to keep, defaults to all
+        start (optional): first date to keep (inclusive)
+        end (optional): last date to keep (inclusive)
 
-def grab_logic(dataFrame:pd.DataFrame, columns:list[str], months:int) -> pd.DataFrame:
-        '''logic for grabbing reservoirs data'''
+    Returns:
+        Dataframe with reservoirs data for the selected interval and columns
+    '''
+    columns = columns or []
 
-        # its ugly don't look
-        # --||-- <- cool graphic don't look further
+    dataFrame = dataFrame.copy()
+    dataFrame["date (y-m-d)"] = pd.to_datetime(dataFrame["date (y-m-d)"])
 
-        # return entire dataframe
-        if columns == [] and months == 0: return dataFrame
-        # return all rows for chosen columns
-        elif columns != [] and months == 0: return dataFrame[columns]
-        # return chosen months for chosen/all columns
-        else:
-                years = months//12
-                months = months%12
-                if months%12 == 0:
-                        months = 12
-                        years = (months//12)-1
+    if start is not None:
+        dataFrame = dataFrame[dataFrame["date (y-m-d)"] >= pd.Timestamp(start)]
+    if end is not None:
+        dataFrame = dataFrame[dataFrame["date (y-m-d)"] <= pd.Timestamp(end)]
 
-                #startDate for query
-                startDate = dataFrame["date (y-m-d)"].sort_values().iloc[0]
-                firstYear = startDate.year
-                firstMonth = startDate.month
+    dataFrame = dataFrame.sort_values("date (y-m-d)").reset_index(drop=True)
 
-                #endDate for query
-                endYear = firstYear + years
-                endMonth = months
-                endDate = pd.Timestamp(year=endYear,month=endMonth,day=1)+pd.offsets.MonthBegin()
+    if columns:
+        dataFrame = dataFrame[columns]
 
-                #DataFrame for relevant timeframe
-                dataFrame = dataFrame[(dataFrame["date (y-m-d)"] >= startDate)& (dataFrame["date (y-m-d)"] < endDate)]
-
-                if not columns: return dataFrame
-                else: return dataFrame[columns]
+    return dataFrame.dropna()

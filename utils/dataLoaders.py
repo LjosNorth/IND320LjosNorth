@@ -1,12 +1,26 @@
 '''
 Loads various data, is called elsewhere to be made use of
 '''
-import json
 from pathlib import Path
+
 import pandas as pd
-import streamlit as st
 import requests
+import streamlit as st
 from pymongo import MongoClient
+
+# API column names -> names used by the rest of the app
+MAGASIN_RENAME = {
+    "dato_Id": "date (y-m-d)",
+    "iso_aar": "year",
+    "iso_uke": "week",
+    "fyllingsgrad": "filled degree",
+    "kapasitet_TWh": "capacity_Twh",
+    "fylling_TWh": "fill_Twh",
+    "neste_Publiseringsdato": "next_PublicizingDate",
+    "fyllingsgrad_forrige_uke": "filled degree last week",
+    "endring_fyllingsgrad": "change in filled degree",
+}
+
 
 # loading the reservoirs data
 @st.cache_data
@@ -16,24 +30,37 @@ def load_Reservoirs_cvs():
     RESERVOIRS_FILE = ROOT / "data" / "reservoirs.csv"
     return pd.read_csv(RESERVOIRS_FILE)
 
+
 @st.cache_data
-def load_magazine_data_api():
-    '''loads from magasinstatistikk'''
+def _fetch_magazine_data():
+    '''Download the full Magasinstatistikk dataset once and cache it.
+
+    The NVE endpoint has no date parameters (they are ignored), so the
+    download interval is applied in load_magazine_data_api() below.
+    '''
     API = "https://biapi.nve.no/magasinstatistikk/api/Magasinstatistikk/HentOffentligData"
-    data = requests.get(API).json()
-    magasinDF = pd.DataFrame(data)
-    magasinDF = magasinDF.rename(columns={
-        "dato_Id": "date (y-m-d)",
-        "iso_aar": "year",
-        "iso_uke": "week",
-        "fyllingsgrad": "filled degree",
-        "kapasitet_TWh": "capacity_Twh",
-        "fylling_TWh": "fill_Twh",
-        "neste_Publiseringsdato": "next_PublicizingDate",
-        "fyllingsgrad_forrige_uke": "filled degree last week",
-        "endring_fyllingsgrad": "change in filled degree"
-    })
+    data = requests.get(API, timeout=120).json()
+    magasinDF = pd.DataFrame(data).rename(columns=MAGASIN_RENAME)
+    magasinDF["date (y-m-d)"] = pd.to_datetime(magasinDF["date (y-m-d)"])
     return magasinDF
+
+
+def load_magazine_data_api(start=None, end=None):
+    '''Return Magasinstatistikk data, optionally trimmed to [start, end].
+
+    Parameters:
+        start: first date to keep (inclusive), e.g. "2020-01-01"
+        end:   last date to keep (inclusive), e.g. "2020-12-31"
+    '''
+    magasinDF = _fetch_magazine_data().copy()
+
+    if start is not None:
+        magasinDF = magasinDF[magasinDF["date (y-m-d)"] >= pd.Timestamp(start)]
+    if end is not None:
+        magasinDF = magasinDF[magasinDF["date (y-m-d)"] <= pd.Timestamp(end)]
+
+    return magasinDF.sort_values("date (y-m-d)").reset_index(drop=True)
+
 
 @st.cache_data
 def load_mongoDB_Data():
@@ -47,8 +74,12 @@ def load_mongoDB_Data():
     collection = database["tranmissionData"]
 
     data = pd.DataFrame(list(collection.find()))
-    # data = pd.to_datetime(data["time"])
-
     client.close()
+
+    # Mongo adds an ObjectId column that pandas/plotly cannot use
+    data = data.drop(columns=["_id"], errors="ignore")
+    if "time" in data.columns:
+        data["time"] = pd.to_datetime(data["time"])
+        data = data.sort_values("time").reset_index(drop=True)
 
     return data
