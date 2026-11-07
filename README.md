@@ -40,9 +40,15 @@
 ├── README.md
 ├── streamlit_app.py
 └── uv.lock
-
-
-
 ```
+
+### Run Locally:
+```bash
+git clone https://github.com/LjosNorth/IND320LjosNorth.git
+cd IND320LjosNorth
+uv sync
+uv run streamlit run streamlit_app.py
+```
+^note parts will not function as secrets will not be provided
 
 Starting Oblig 3 - (not yet) Read [Changelog](CHANGELOG.md)
