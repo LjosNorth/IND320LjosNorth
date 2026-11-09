@@ -9,7 +9,6 @@
 .
 ├── .streamlit
 │   ├── config.toml
-│   └── secrets.toml
 ├── data
 │   └── reservoirs.csv
 ├── notebooks
