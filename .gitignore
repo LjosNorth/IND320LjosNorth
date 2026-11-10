@@ -225,3 +225,11 @@ __marimo__/
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
 /.idea/jsonCatalog.xml
+
+# Large local weather downloads
+data/regions/weather/
+
+# Generated weather caches and resume state
+data/regions/samples/weather/batches_*/
+data/regions/samples/weather/cell_daily_*.parquet
+data/regions/state/

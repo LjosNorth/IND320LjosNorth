@@ -8,32 +8,52 @@
 ```bash
 .
 ├── .streamlit
-│   ├── config.toml
+│   └── config.toml
 ├── data
-│   └── reservoirs.csv
+│   ├── regions
+│   │   ├── electricity_areas.*
+│   │   ├── precipitation_areas.*
+│   │   ├── README.md
+│   │   ├── samples
+│   │   │   ├── samples_NO*.csv
+│   │   │   ├── samples_VASS*.csv
+│   │   │   └── weather
+│   │   │       ├── NO
+│   │   │       ├── NO1 ... NO5
+│   │   │       └── VASS1 ... VASS3
+│   │   └── state
+│   └── reservoirs.csv
 ├── notebooks
-│   ├── Oblig1.ipynb
-│   └── Oblig2.ipynb
+│   ├── Oblig1.ipynb
+│   ├── Oblig2.ipynb
+│   └── Oblig3.ipynb
 ├── Oblig
-│   ├── Oblig1
-│   │   ├── Oblig1.html
-│   │   └── Oblig1ScreenCast.mp4
-│   └── Oblig2
-│       ├── 2026-10-20 ind320Oblig2.mp4
-│       └── Oblig2.html
+│   ├── Oblig1
+│   │   ├── Oblig1.html
+│   │   └── Oblig1ScreenCast.mp4
+│   ├── Oblig2
+│   │   ├── 2026-10-20 ind320Oblig2.mp4
+│   │   └── Oblig2.html
+│   └── Oblig3
+│       └── Oblig3.html
 ├── pages
-│   ├── home.py
-│   ├── plotData.py
-│   ├── settings.py
-│   ├── tabularData.py
-│   └── transmissionsPlot.py
+│   ├── home.py
+│   ├── plotData.py
+│   ├── reservoirAnalysis.py
+│   ├── settings.py
+│   ├── tabularData.py
+│   ├── transmissionsPlot.py
+│   └── weatherAnalysis.py
 ├── utils
-│   ├── dataLoaders.py
-│   ├── decorators.py
-│   ├── fixit.py
-│   ├── reservoirsSelect.py
-│   ├── sessionstatehandler.py
-│   └── UserRoles.py
+│   ├── Analysis.py
+│   ├── areaSelect.py
+│   ├── dataLoaders.py
+│   ├── decorators.py
+│   ├── fixit.py
+│   ├── meteo.py
+│   ├── reservoirsSelect.py
+│   ├── sessionstatehandler.py
+│   └── UserRoles.py
 ├── CHANGELOG.md
 ├── pyproject.toml
 ├── README.md

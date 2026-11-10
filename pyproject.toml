@@ -36,5 +36,6 @@ dependencies = [
     "lorem",
     "pymongo",
     "streamlit",
-    "nbstripout"
+    "nbstripout",
+    "geopandas>=1.2.0",
 ]

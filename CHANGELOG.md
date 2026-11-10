@@ -3,6 +3,24 @@
 All notable changes are noted here\
 if im a good boy that does what I say I'm going to & remember the changes lol
 
+## [3.0] - 10-11-2026
+
+### Added
+- **notebook/Oblig3.ipynb**: weather data, DCT/SPC outliers, LOF anomalies, STL and spectrogram
+- **utils/meteo.py**: ERA5 download, grid aggregation and MongoDB upload
+- **utils/Analysis.py**: Plotly analysis functions for the weather and reservoir pages
+- **reservoir analysis page**: STL and spectrogram tabs
+- **weather analysis page**: SPC and LOF tabs
+- weather data for all regions in MongoDB
+
+### Changed
+- updated Oblig 3 data loading and page structure
+- added icons to the analysis pages
+- added geopandas for the area shapefiles
+
+### Removed
+- placeholder weather page content
+
 ## [2.0] - 20-10-2026
 
 ### Added

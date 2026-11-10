@@ -59,13 +59,34 @@ pagePlots = st.Page("pages/plotData.py", title="Reservoir plots", icon="📊")
 pageTransmission = st.Page(
     "pages/transmissionsPlot.py", title="Transmission plots", icon="📈"
 )
+pageAnalysisReservoir = st.Page(
+    "pages/reservoirAnalysis.py", title="Reservoir Analysis", icon="🔬"
+)
+pageAnalysisWeather = st.Page(
+    "pages/weatherAnalysis.py", title="Weather Analysis", icon="🌦️"
+)
 pageSettings = st.Page("pages/settings.py", title="settings", icon="⚙️")
 
 # who sees what pages
 if st.session_state.userRole == UserRoles.ADMIN:
-    pages = [pageHome, pageTables, pagePlots, pageTransmission, pageSettings]
+    pages = [
+        pageHome,
+        pageTables,
+        pagePlots,
+        pageTransmission,
+        pageAnalysisReservoir,
+        pageAnalysisWeather,
+        pageSettings,
+    ]
 else:
-    pages = [pageHome, pageTables, pagePlots, pageTransmission]
+    pages = [
+        pageHome,
+        pageTables,
+        pagePlots,
+        pageAnalysisReservoir,
+        pageAnalysisWeather,
+        pageTransmission,
+    ]
 
 # make and run sidebar
 sidebar = st.navigation(pages, position="sidebar")

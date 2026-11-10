@@ -1,10 +1,10 @@
-'''page for displaying the entsoE data'''
+"""page for displaying the entsoE data"""
 
 import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-from utils.dataLoaders import load_mongoDB_Data
+from utils.dataLoaders import load_mongoDB_transmission_data
 
 # [column towards Norway, column away from Norway]
 CONNECTIONS = {
@@ -35,7 +35,7 @@ MONTHS = [
 
 class TransmissionPlot:
     def __init__(self):
-        self.transmissions = load_mongoDB_Data()
+        self.transmissions = load_mongoDB_transmission_data()
 
         # Filled in by renderCol1 and reused by renderCol2
         self.connection = None
@@ -46,7 +46,7 @@ class TransmissionPlot:
 
     @staticmethod
     def yearStarts(dataFrame: pd.DataFrame) -> list[int]:
-        '''Return the start year of every October -> September year in the data.'''
+        """Return the start year of every October -> September year in the data."""
         if dataFrame.empty or "time" not in dataFrame.columns:
             return []
 
@@ -62,7 +62,7 @@ class TransmissionPlot:
         return f"{startYear}-{startYear + 1}"
 
     def yearData(self, startYear: int) -> pd.DataFrame:
-        '''Rows belonging to one October -> September year.'''
+        """Rows belonging to one October -> September year."""
         dataFrame = self.transmissions.copy()
         dataFrame["yearStart"] = dataFrame["time"].dt.year.where(
             dataFrame["time"].dt.month >= 10,
@@ -71,11 +71,13 @@ class TransmissionPlot:
         return dataFrame[dataFrame["yearStart"] == startYear]
 
     def pieChart(self, label: str, totalIn: float, totalOut: float, rangeLabel: str):
-        '''In/out totals for one connection and one year.'''
-        data = pd.DataFrame({
-            "category": ["In", "Out"],
-            "values": [totalIn, totalOut],
-        })
+        """In/out totals for one connection and one year."""
+        data = pd.DataFrame(
+            {
+                "category": ["In", "Out"],
+                "values": [totalIn, totalOut],
+            }
+        )
         fig = px.pie(
             data,
             values="values",
@@ -85,7 +87,7 @@ class TransmissionPlot:
         st.plotly_chart(fig, use_container_width=True)
 
     def lineChart(self, dataFrame: pd.DataFrame, columns: list[str]):
-        '''Daily averages keep the plot readable (same as the notebook).'''
+        """Daily averages keep the plot readable (same as the notebook)."""
         dataFrame = (
             dataFrame.set_index("time")
             .resample("D")
@@ -96,7 +98,7 @@ class TransmissionPlot:
         st.plotly_chart(fig, use_container_width=True)
 
     def renderCol1(self):
-        '''Connection + year controls and the in/out pie chart.'''
+        """Connection + year controls and the in/out pie chart."""
         self.connection = st.radio(
             "pick a connection", list(CONNECTIONS), horizontal=True
         )
@@ -123,7 +125,7 @@ class TransmissionPlot:
         self.pieChart(self.connection, totalIn, totalOut, label)
 
     def renderCol2(self):
-        '''Month pills and the line plot for the selected connection/year.'''
+        """Month pills and the line plot for the selected connection/year."""
         if self.yearStart is None:
             return
 
@@ -143,12 +145,9 @@ class TransmissionPlot:
         yearDF["month"] = yearDF["time"].dt.strftime("%B")
 
         # Only the selected connection, not all twelve columns
-        plotDF = (
-            yearDF[yearDF["month"].isin(monthsChoosen)][
-                ["time", *self.connectionColumns]
-            ]
-            .dropna()
-        )
+        plotDF = yearDF[yearDF["month"].isin(monthsChoosen)][
+            ["time", *self.connectionColumns]
+        ].dropna()
 
         if plotDF.empty:
             st.info("No data for the chosen months.")
@@ -157,7 +156,7 @@ class TransmissionPlot:
         self.lineChart(plotDF, self.connectionColumns)
 
     def renderPage(self):
-        '''render the page'''
+        """render the page"""
         st.set_page_config(
             page_title="Transmission plots",
             page_icon="📈",
@@ -181,7 +180,7 @@ class TransmissionPlot:
             )
 
     def run(self):
-        '''run the page'''
+        """run the page"""
         self.renderPage()
 
 
